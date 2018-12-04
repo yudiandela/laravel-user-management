@@ -14,7 +14,7 @@ class AlterUsersTableAddRoleField extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('role')->after('email')->default(99);
+            $table->tinyInteger('role')->after('username')->default(99);
         });
     }
 
