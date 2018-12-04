@@ -17,7 +17,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'MainController@index')->name('index');
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::group(['middleware' => ['admin']], function () {
-        Route::get('/admin', 'AdminController@index')->name('admin.index');
+    Route::group(['middleware' => ['admin'], 'prefix' => 'admin'], function () {
+        Route::get('/', 'AdminController@index')->name('admin.index');
+
+        Route::name('admin.')->group(function () {
+            Route::resource('user', 'UserController')->except('show');
+        });
     });
 });
