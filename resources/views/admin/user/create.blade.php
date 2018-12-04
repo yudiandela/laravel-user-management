@@ -96,7 +96,7 @@
                             <div class="col-sm-3"></div>
                             <div class="col-sm-6">
                                 <button type="submit" class="btn btn-gradient-primary mr-2">Submit</button>
-                                <button class="btn btn-light">Cancel</button>
+                                <a href="{{ route('admin.user.index') }}" class="btn btn-light">Cancel</a>
                             </div>
                         </div>
 
