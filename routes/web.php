@@ -11,14 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes(['register' => false]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', 'MainController@index')->name('index');
+    Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin'], 'name' => 'admin.'], function () {
-    Route::get('/', 'AdminController@index')->name('index');
+    Route::group(['middleware' => ['admin']], function () {
+        Route::get('/admin', 'AdminController@index')->name('admin.index');
+    });
 });
