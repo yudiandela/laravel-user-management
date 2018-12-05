@@ -14,6 +14,15 @@
         <nav aria-label="breadcrumb">
             <ul class="breadcrumb p-0">
                 <li class="breadcrumb-item active" aria-current="page">
+                    @if (Active::checkRoute('admin.user.trash') == 'active')
+                        <a href="{{ route('admin.user.index') }}" class="btn btn-gradient-success">
+                            All Users
+                        </a>
+                    @else
+                        <a href="{{ route('admin.user.trash') }}" class="btn btn-gradient-danger">
+                            Trash
+                        </a>
+                    @endif
                     <a href="{{ route('admin.user.create') }}" class="btn btn-gradient-primary">
                         Add New User
                     </a>
@@ -84,23 +93,36 @@
                                                 {{ $user->roleString() }}
                                             </td>
                                             <td>
-                                                @if ($user->email_verified_at)
-                                                    <a href="{{ route('admin.user.activation', $user->id) }}" class="badge badge-gradient-success">{{ __('ACTIVE') }}</a>
+                                                @if (Active::checkRoute('admin.user.trash') == 'no')
+                                                    @if ($user->email_verified_at)
+                                                        <a href="{{ route('admin.user.activation', $user->id) }}" class="badge badge-gradient-success">{{ __('ACTIVE') }}</a>
+                                                    @else
+                                                        <a href="{{ route('admin.user.activation', $user->id) }}" class="badge badge-gradient-info">{{ __('NOT ACTIVE') }}</a>
+                                                    @endif
                                                 @else
-                                                    <a href="{{ route('admin.user.activation', $user->id) }}" class="badge badge-gradient-danger">{{ __('NOT ACTIVE') }}</a>
+                                                    <span class="badge badge-gradient-danger">{{ __('TRASH') }}</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('admin.user.edit', $user->id) }}" class="text-success"> Edit </a> |
-                                                <a href="{{ route('admin.user.destroy', $user->id) }}"
-                                                    onclick="event.preventDefault();
-                                                    document.getElementById('delete-user-{{ $user->id }}').submit();"
-                                                    class="text-danger"> {{ __('Delete') }}
-                                                </a>
-                                                <form id="delete-user-{{ $user->id }}" hidden action="{{ route('admin.user.destroy', $user->id) }}" method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form>
+                                                @if (Active::checkRoute('admin.user.trash') == 'active')
+                                                    <a href="{{ route('admin.user.restore', $user->id) }}" class="text-success">
+                                                        {{ __('Restore') }}
+                                                    </a> |
+                                                    <a href="{{ route('admin.user.forceDelete', $user->id) }}" class="text-danger">
+                                                        {{ __('Delete') }}
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('admin.user.edit', $user->id) }}" class="text-success"> {{ __('Edit') }} </a> |
+                                                    <a href="{{ route('admin.user.destroy', $user->id) }}"
+                                                        onclick="event.preventDefault();
+                                                        document.getElementById('delete-user-{{ $user->id }}').submit();"
+                                                        class="text-danger"> {{ __('Trash') }}
+                                                    </a>
+                                                    <form id="delete-user-{{ $user->id }}" hidden action="{{ route('admin.user.destroy', $user->id) }}" method="post">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

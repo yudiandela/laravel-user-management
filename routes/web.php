@@ -23,6 +23,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::name('admin.')->group(function () {
             Route::resource('user', 'UserController')->except('show');
             Route::get('user/{user}/activation', 'UserController@userActivation')->name('user.activation');
+            Route::get('user/trash', 'UserController@trash')->name('user.trash');
+            Route::get('user/{id}/force', 'UserController@forceDelete')->name('user.forceDelete');
+            Route::get('user/{id}/restore', 'UserController@restore')->name('user.restore');
         });
     });
 });

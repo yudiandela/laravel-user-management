@@ -16,7 +16,22 @@ class UserController extends Controller
      */
     public function index(User $user)
     {
-        $users = $user->where('id', '>', 1)->paginate(10);
+        $users = $user->where('id', '>', 1)
+                ->orderBy('id', 'desc')
+                ->paginate(10);
+        return view('admin.user.index', compact('users'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function trash(User $user)
+    {
+        $users = $user->onlyTrashed()
+                      ->paginate(10);
+
         return view('admin.user.index', compact('users'));
     }
 
@@ -119,10 +134,52 @@ class UserController extends Controller
             return redirect()->back()->with('failed', 'Tidak dapat menghapus data ' . $user->roleString());
         }
 
-        Storage::delete('public/images/' . $user->photo);
+        if ($user->email_verified_at) {
+            $user->email_verified_at = null;
+            $user->save();
+        }
+
         $user->delete();
 
         return redirect()->back()->with('success', 'Berhasil menghapus data user ' . $user->name);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDelete($id, User $user)
+    {
+        $users = $user->onlyTrashed()->where('id', $id)->get();
+
+        foreach ($users as $user) {
+            Storage::delete('public/images/' . $user->photo);
+        }
+
+        $user->withTrashed()->where('id', $id)->forceDelete();
+
+        return redirect()->back()->with('success', "Data $user->name sudah berhasil di hapus secara permanent");
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id, User $user)
+    {
+        $users = $user->onlyTrashed()->where('id', $id)->get();
+
+        foreach ($users as $user) {
+            $user->restore();
+        }
+
+        return redirect()->back()->with('success', "Data $user->name sudah berhasil di kembalikan");
     }
 
     /**
