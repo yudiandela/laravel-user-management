@@ -143,6 +143,12 @@ class UserController extends Controller
         return $imageFullName;
     }
 
+    /**
+     * Activation user
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
     public function userActivation(User $user)
     {
         $activation = $user->email_verified_at;
