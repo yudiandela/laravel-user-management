@@ -61,6 +61,7 @@
     <!-- endinject -->
     <!-- Custom js for this page-->
     <script src="{{ asset('theme/js/dashboard.js') }}"></script>
+    <script src="{{ asset('theme/js/file-upload.js') }}"></script>
     <!-- End custom js for this page-->
 </body>
 

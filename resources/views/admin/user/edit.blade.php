@@ -23,7 +23,7 @@
         <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.user.update', $user->id) }}">
+                    <form method="POST" action="{{ route('admin.user.update', $user->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-group row">
@@ -89,6 +89,24 @@
                                         Member
                                         <i class="input-helper"></i>
                                     </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="photo" class="col-sm-3 col-form-label">Photo</label>
+                            <div class="col-sm-6">
+                                <input type="file" name="photo" class="file-upload-default" value="{{ old('photo') ? old('photo') : $user->photo }}">
+                                <div class="input-group col-xs-12">
+                                    <input type="text" class="form-control file-upload-info{{ $errors->has('photo') ? ' is-invalid' : '' }}" value="{{ old('photo') ? old('photo') : $user->photo }}" disabled="" placeholder="Upload Image">
+                                    <span class="input-group-append">
+                                        <button class="file-upload-browse btn btn-gradient-primary" type="button">Image</button>
+                                    </span>
+                                    @if ($errors->has('photo'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('photo') }}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

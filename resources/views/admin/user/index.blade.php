@@ -64,45 +64,51 @@
                                     $no = 1;
                                 @endphp
 
-                                @foreach ($users as $user)
-                                <tr>
-                                    <td>
-                                        {{ $no++ }}
-                                    </td>
-                                    <td>
-                                        <img src="{{ asset('theme/images/faces/face1.jpg') }}" class="mr-2" alt="image">
-                                        {{ $user->name }}
-                                    </td>
-                                    <td>
-                                        {{ $user->email }}
-                                    </td>
-                                    <td>
-                                        {{ $user->username }}
-                                    </td>
-                                    <td>
-                                        {{ $user->roleString() }}
-                                    </td>
-                                    <td>
-                                        @if ($user->email_verified_at)
-                                            <label class="badge badge-gradient-success">{{ __('ACTIVE') }}</label>
-                                        @else
-                                            <label class="badge badge-gradient-danger">{{ __('NOT ACTIVE') }}</label>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('admin.user.edit', $user->id) }}" class="text-success"> Edit </a> |
-                                        <a href="{{ route('admin.user.destroy', $user->id) }}"
-                                            onclick="event.preventDefault();
-                                            document.getElementById('delete-user-{{ $user->id }}').submit();"
-                                            class="text-danger"> {{ __('Delete') }}
-                                        </a>
-                                        <form id="delete-user-{{ $user->id }}" hidden action="{{ route('admin.user.destroy', $user->id) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                @if ($users->count() > 0)
+                                    @foreach ($users as $user)
+                                        <tr>
+                                            <td>
+                                                {{ $no++ }}
+                                            </td>
+                                            <td>
+                                                <img src="{{ $user->user_image }}" class="mr-2" alt="image">
+                                                {{ $user->name }}
+                                            </td>
+                                            <td>
+                                                {{ $user->email }}
+                                            </td>
+                                            <td>
+                                                {{ $user->username }}
+                                            </td>
+                                            <td>
+                                                {{ $user->roleString() }}
+                                            </td>
+                                            <td>
+                                                @if ($user->email_verified_at)
+                                                    <label class="badge badge-gradient-success">{{ __('ACTIVE') }}</label>
+                                                @else
+                                                    <label class="badge badge-gradient-danger">{{ __('NOT ACTIVE') }}</label>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('admin.user.edit', $user->id) }}" class="text-success"> Edit </a> |
+                                                <a href="{{ route('admin.user.destroy', $user->id) }}"
+                                                    onclick="event.preventDefault();
+                                                    document.getElementById('delete-user-{{ $user->id }}').submit();"
+                                                    class="text-danger"> {{ __('Delete') }}
+                                                </a>
+                                                <form id="delete-user-{{ $user->id }}" hidden action="{{ route('admin.user.destroy', $user->id) }}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="7" class="text-center">No data</td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
 

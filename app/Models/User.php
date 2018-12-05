@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'username', 'role', 'password',
+        'name', 'email', 'username', 'role', 'password', 'photo',
     ];
 
     /**
@@ -48,5 +49,16 @@ class User extends Authenticatable
         }
 
         return 'Member';
+    }
+
+    public function getUserImageAttribute()
+    {
+        $photo = Storage::url('images/' . $this->photo);
+
+        if ($this->photo == null) {
+            $photo = 'images/no-image.jpg';
+        }
+
+        return asset($photo);
     }
 }

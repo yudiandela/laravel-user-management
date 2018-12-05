@@ -19,6 +19,7 @@ class AdminUserTableSeeder extends Seeder
             'role'              => 1,
             'email_verified_at' => now(),
             'password'          => '$2y$10$NQUIWcXCKAkywZrEh1YE4.jyAVgTWsmg4/lIAuu94oCoGXrgkByaC', // 123456
+            'photo'             => null,
             'remember_token'    => str_random(10),
         ];
 
