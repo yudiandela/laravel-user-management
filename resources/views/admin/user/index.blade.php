@@ -85,9 +85,9 @@
                                             </td>
                                             <td>
                                                 @if ($user->email_verified_at)
-                                                    <label class="badge badge-gradient-success">{{ __('ACTIVE') }}</label>
+                                                    <a href="{{ route('admin.user.activation', $user->id) }}" class="badge badge-gradient-success">{{ __('ACTIVE') }}</a>
                                                 @else
-                                                    <label class="badge badge-gradient-danger">{{ __('NOT ACTIVE') }}</label>
+                                                    <a href="{{ route('admin.user.activation', $user->id) }}" class="badge badge-gradient-danger">{{ __('NOT ACTIVE') }}</a>
                                                 @endif
                                             </td>
                                             <td>

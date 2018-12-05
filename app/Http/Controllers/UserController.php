@@ -42,7 +42,7 @@ class UserController extends Controller
             'name'     => ['required', 'string', 'min:3', 'max:255'],
             'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
             'username' => ['required', 'alpha_dash', 'min: 3', 'max:255', 'unique:users,username'],
-            'photo'    => ['required'],
+            'photo'    => ['required', 'mimes:jpeg,bmp,png,gif'],
         ]);
 
         $photo = '';
@@ -87,9 +87,10 @@ class UserController extends Controller
             'name'     => ['required', 'string', 'min:3', 'max:255'],
             'email'    => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'username' => ['required', 'alpha_dash', 'min:3', 'max:255', 'unique:users,username,'.$user->id],
+            'photo'    => ['mimes:jpeg,bmp,png,gif'],
         ]);
 
-        $photo = '';
+        $photo = $user->photo;
 
         if ($request->hasFile('photo')) {
             Storage::delete('public/images/' . $user->photo);
@@ -140,5 +141,20 @@ class UserController extends Controller
         $image->storeAs('public/images', $imageFullName);
 
         return $imageFullName;
+    }
+
+    public function userActivation(User $user)
+    {
+        $activation = $user->email_verified_at;
+
+        if ($activation === null) {
+            $user->email_verified_at = now();
+        } else {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', "User $user->name status has been changed successfully");
     }
 }

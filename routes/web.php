@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::name('admin.')->group(function () {
             Route::resource('user', 'UserController')->except('show');
+            Route::get('user/{user}/activation', 'UserController@userActivation')->name('user.activation');
         });
     });
 });
