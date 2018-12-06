@@ -34,13 +34,24 @@ class LoginTest extends TestCase
     }
 
     /** @test */
+    public function RegisteredUserCanNotBeLoginValidation()
+    {
+        // Arahkan ke halaman login
+        // dengan method post dengan inputan kosong
+        $this->post('/login', [
+            'email'    => '',
+            'password' => '',
+        ]);
+
+        // Cek error yang ada pada session
+        $this->assertSessionHasErrors(['email', 'password']);
+    }
+
+    /** @test */
     public function LoggedInUserCanLogout()
     {
         // Kita memiliki 1 user terdaftar
-        $user = factory(User::class)->create([
-            'email'    => 'username@example.net',
-            'password' => bcrypt('secret'),
-        ]);
+        $user = factory(User::class)->create();
 
         // Login sebagai user tersebut
         $this->actingAs($user);
