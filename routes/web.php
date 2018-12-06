@@ -13,7 +13,7 @@
 
 Route::get('/', 'MainController@index')->name('index');
 
-Auth::routes(['register' => false]);
+Auth::routes(/* ['register' => false] */);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
