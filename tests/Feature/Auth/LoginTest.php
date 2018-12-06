@@ -15,23 +15,17 @@ class LoginTest extends TestCase
     public function LoginUser($isAdmin = false)
     {
         $user = factory(User::class)->create([
-            'email'    => 'username@example.net',
+            'email'    => 'test@user-mail.net',
             'password' => bcrypt('secret'),
-            'role'     => 1
         ]);
 
-        $this->visit('/login')
+        $this->visit('/home');
+
+        $this->seePageIs('/login')
              ->submitForm('Login', [
                  'email'    => $user->email,
                  'password' => 'secret',
-             ]);
-
-        if ($isAdmin) {
-            $this->visit('/admin');
-        } else {
-            $this->visit('/home');
-        }
-
-        $this->seeText('Dashboard');
+             ])
+             ->seePageIs('/home');
     }
 }

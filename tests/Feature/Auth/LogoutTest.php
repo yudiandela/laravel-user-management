@@ -12,17 +12,13 @@ class LogoutTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function LogoutUser($isAdmin = false)
+    public function LogoutUser()
     {
         $user = factory(User::class)->create();
 
         $this->actingAs($user);
 
-        if ($isAdmin) {
-            $this->visit('/admin');
-        } else {
-            $this->visit('/home');
-        }
+        $this->visit('/home');
 
         $this->post('/logout');
     }
