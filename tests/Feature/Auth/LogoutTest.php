@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Auth;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -12,12 +12,18 @@ class LogoutTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function LogoutUser()
+    public function LogoutUser($isAdmin = false)
     {
         $user = factory(User::class)->create();
 
-        $this->actingAs($user)
-             ->visit('/home')
-             ->post('/logout');
+        $this->actingAs($user);
+
+        if ($isAdmin) {
+            $this->visit('/admin');
+        } else {
+            $this->visit('/home');
+        }
+
+        $this->post('/logout');
     }
 }
