@@ -33,6 +33,9 @@ before_install:
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - printf "\n" | pecl install -f redis
   - travis_retry composer self-update
+  - travis_retry composer install --prefer-source --no-interaction --dev
+  - cp .env.example .env
+  - php artisan key:generate
   - mysql -e 'CREATE DATABASE forge;'
 
 install:
