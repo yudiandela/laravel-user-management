@@ -3,16 +3,18 @@ sudo: required
 dist: trusty
 
 php:
-  - 7.1
+  - 7.2
+
+addons:
+  chrome: stable
 
 install:
-  - travis_retry composer install --no-interaction
+  - cp .env.testing .env
+  - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+  - php artisan key:generate
 
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - ./vendor/laravel/dusk/bin/chromedriver-linux &
-  - cp .env.testing .env
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - php artisan serve &
 
 script:
