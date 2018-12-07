@@ -21,12 +21,12 @@
             </a>
         </li>
         <li class="nav-item {{ Active::checkRoute('admin.user.*') }} ">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-toggle="collapse" href="#users" aria-expanded="false" aria-controls="users">
                 <span class="menu-title">{{ __('Users') }}</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-account-multiple menu-icon"></i>
             </a>
-            <div class="collapse {{ Active::checkRoute('admin.user.*','show') }}" id="ui-basic">
+            <div class="collapse {{ Active::checkRoute('admin.user.*','show') }}" id="users">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('admin.user.index') }}">{{ __('All Users') }}</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ route('admin.user.create') }}">{{ __('Add Users') }}</a></li>
