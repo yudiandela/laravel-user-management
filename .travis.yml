@@ -1,5 +1,5 @@
 language: php
-sudo: required
+
 dist: trusty
 
 php:
@@ -10,9 +10,26 @@ php:
 addons:
   chrome: stable
 
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+  - memcached
+  - redis-server
+  - mysql
+
+before_install:
+  - phpenv config-rm xdebug.ini || true
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - printf "\n" | pecl install -f redis
+  - mysql -e 'CREATE DATABASE forge;'
+
 install:
-  - cp .env.example .env
   - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+  - cp .env.example .env
   - php artisan key:generate
   - php artisan migrate --seed
 
