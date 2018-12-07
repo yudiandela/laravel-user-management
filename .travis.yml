@@ -1,21 +1,31 @@
 language: php
-sudo: required
-dist: trusty
 
 php:
+  - 7.1
   - 7.2
+  - 7.3
 
-addons:
-  chrome: stable
+sudo: false
 
-install:
-  - cp .env.testing .env
-  - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+  - memcached
+  - redis-server
+  - mysql
+
+before_install:
+  - phpenv config-rm xdebug.ini || true
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - printf "\n" | pecl install -f redis
+  - travis_retry composer self-update
+  - travis_retry composer install --prefer-source --no-interaction --dev
+  - cp .env.example .env
   - php artisan key:generate
+  - mysql -e 'CREATE DATABASE forge;'
 
-before_script:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-  - php artisan serve &
+install: travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest
 
-script:
-  - php artisan dusk
+script: vendor/bin/phpunit
