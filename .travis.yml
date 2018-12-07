@@ -10,10 +10,25 @@ php:
 addons:
   chrome: stable
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+  - memcached
+  - redis-server
+  - mysql
+
 install:
-  - cp .env.testing .env
+  - phpenv config-rm xdebug.ini || true
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - printf "\n" | pecl install -f redis
+  - mysql -e 'CREATE DATABASE forge;'
+  - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+  - cp .env.testing .env
   - php artisan key:generate
+  - php artisan migrate --seed
 
 before_script:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
