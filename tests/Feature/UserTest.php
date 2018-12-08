@@ -2,25 +2,16 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use Tests\UserAuth;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UserTest extends TestCase
+class UserTest extends UserAuth
 {
-    use RefreshDatabase;
-
     /** @test */
     public function UserList()
     {
-        // Buat sebuah akun sebagai admin
-        $user = factory(User::class)->create([
-            'role' => 1
-        ]);
-
-        // Login sebagai admin
-        $this->actingAs($user);
+        // Login user sebagai admin
+        $this->adminLogin();
 
         // Kunjungi halaman admin/user
         $this->visit('admin/user');
@@ -32,13 +23,8 @@ class UserTest extends TestCase
     /** @test */
     public function CreateNewUser()
     {
-        // Daftar user dengan role 1
-        $user = factory(User::class)->create([
-            'role' => 1
-        ]);
-
-        // Login akun
-        $this->actingAs($user);
+        // Login user sebagai admin
+        $this->adminLogin();
 
         // Kunjungi Halaman admin/user/create
         $this->visit('admin/user/create');
@@ -47,30 +33,25 @@ class UserTest extends TestCase
         $this->seeText('Add New User');
 
         // Submit form dengan data
-        $this->type('John Doe', 'name')  // Masukkan inputan name
-             ->type('john.doe@mail.com', 'email') // Masukkan inputan email
-             ->type('johndoe', 'username')
-             ->select(3, 'role')
-             ->attach('public/images/no-image.jpg', 'photo')
+        $this->type('John Doe', 'name')                         // Masukkan inputan name
+             ->type('john.doe@mail.com', 'email')               // Masukkan inputan email
+             ->type('johndoe', 'username')                      // Masukkan inputan username
+             ->select(3, 'role')                                // Masukkan inputan role
+             ->attach('public/images/no-image.jpg', 'photo')    // Upload photo
              ->press('Submit');
 
         // Redirect ke halaman /admin/user
         $this->seePageIs('/admin/user');
 
         // Lihat text hasil inputan
-        $this->seeText('John Doe');
+        $this->seeText('Berhasil menambahkan data user John Doe');
     }
 
     /** @test */
     public function AddTrashUser()
     {
-        // Daftar user dengan role 1
-        $user = factory(User::class)->create([
-            'role' => 1
-        ]);
-
-        // Login akun admin
-        $this->actingAs($user);
+        // Login user sebagai admin
+        $this->adminLogin();
 
         // Buat sebuah user dengan role 99
         $user_delete = factory(User::class)->create();
@@ -82,19 +63,14 @@ class UserTest extends TestCase
         $this->visit('admin/user/trash');
 
         // Lihat text (Nama User yang di delete)
-        $this->seeText($user_delete->name);
+        $this->seeText('Berhasil menghapus data user ' . $user_delete->name);
     }
 
     /** @test */
     public function RestoreUser()
     {
-        // Daftar user dengan role 1
-        $user = factory(User::class)->create([
-            'role' => 1
-        ]);
-
-        // Login akun admin
-        $this->actingAs($user);
+        // Login user sebagai admin
+        $this->adminLogin();
 
         // Buat sebuah user dengan role 99
         $user_delete = factory(User::class)->create();
@@ -108,26 +84,21 @@ class UserTest extends TestCase
         // Lihat text (Nama User yang di delete)
         $this->seeText($user_delete->name);
 
-        // Kunjungi halaman admin/user/$user->id/restore
-        $this->visit("admin/user/$user->id/restore");
+        // Kunjungi halaman admin/user/$user_delete->id/restore
+        $this->visit("admin/user/$user_delete->id/restore");
 
         // Redirect halaman ke admin/user/trash
         $this->seePageIs('admin/user/trash');
 
         // Lihat pesan berhasil hapus secara permanent
-        $this->seeText('Berhasil');
+        $this->seeText('Data ' . $user_delete->name . ' sudah berhasil di kembalikan');
     }
 
     /** @test */
     public function DeleteUserPermanent()
     {
-        // Daftar user dengan role 1
-        $user = factory(User::class)->create([
-            'role' => 1
-        ]);
-
-        // Login akun admin
-        $this->actingAs($user);
+        // Login user sebagai admin
+        $user = $this->adminLogin();
 
         // Buat sebuah user dengan role 99
         $user_delete = factory(User::class)->create();
@@ -141,13 +112,13 @@ class UserTest extends TestCase
         // Lihat text (Nama User yang di delete)
         $this->seeText($user_delete->name);
 
-        // Kunjungi halaman admin/user/$user->id/force
-        $this->visit("admin/user/$user->id/force");
+        // Kunjungi halaman admin/user/$user_delete->id/force
+        $this->visit("admin/user/$user_delete->id/force");
 
         // Redirect halaman ke admin/user/trash
         $this->seePageIs('admin/user/trash');
 
         // Lihat pesan berhasil hapus secara permanent
-        $this->seeText('Berhasil');
+        $this->seeText('Data ' . $user_delete->name . ' sudah berhasil di hapus secara permanent');
     }
 }
