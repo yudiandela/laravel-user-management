@@ -1,4 +1,4 @@
-# Laravel User Management
+<p align="center"><img src="https://raw.githubusercontent.com/yudiandela/karya/master/logo-laravel-user-mangement.png" alt="Logo Laravel User Management"></p>
 
 <p align="center">
 <a href="https://travis-ci.org/yudiandela/laravel-user-management"><img src="https://travis-ci.org/yudiandela/laravel-user-management.svg" alt="Build Status"></a>
