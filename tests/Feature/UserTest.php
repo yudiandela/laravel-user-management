@@ -48,6 +48,37 @@ class UserTest extends UserAuth
     }
 
     /** @test */
+    public function UpdateUser()
+    {
+        // Login user sebagai admin
+        $this->adminLogin();
+
+        // Input sebuah id untuk user
+        $user = factory(User::class)->create([
+            'id'   => 100
+        ]);
+
+        // Kunjungi halaman user list
+        $this->visit('admin/user/' . $user->id . '/edit');
+
+        // Lihat value/text dengan nama user yang akan di edit
+        $this->see($user->name);
+
+        // Submit form dengan data baru
+        $this->submitForm('Submit', [
+            '_method' => 'PUT',
+            'name'    => 'Name Update',
+            'username' => 'username_update'
+        ]);
+
+        // Redirect halaman ke admin/user
+        $this->seePageIs('admin/user');
+
+        // Lihat pesan berhasil
+        $this->see('Berhasil mengubah data user');
+    }
+
+    /** @test */
     public function AddTrashUser()
     {
         // Login user sebagai admin
