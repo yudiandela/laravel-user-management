@@ -44,7 +44,7 @@ class UserTest extends UserAuth
         $this->seePageIs('/admin/user');
 
         // Lihat text hasil inputan
-        $this->seeText('Berhasil menambahkan data user John Doe');
+        $this->see('Berhasil menambahkan data user John Doe');
     }
 
     /** @test */
@@ -94,7 +94,7 @@ class UserTest extends UserAuth
         $this->visit('admin/user/trash');
 
         // Lihat text (Nama User yang di delete)
-        $this->seeText('Berhasil menghapus data user ' . $user_delete->name);
+        $this->see('Berhasil menghapus data user ' . $user_delete->name);
     }
 
     /** @test */
@@ -122,7 +122,7 @@ class UserTest extends UserAuth
         $this->seePageIs('admin/user/trash');
 
         // Lihat pesan berhasil hapus secara permanent
-        $this->seeText('Data ' . $user_delete->name . ' sudah berhasil di kembalikan');
+        $this->see('Berhasil mengembalikan data ' . $user_delete->name);
     }
 
     /** @test */
@@ -150,6 +150,6 @@ class UserTest extends UserAuth
         $this->seePageIs('admin/user/trash');
 
         // Lihat pesan berhasil hapus secara permanent
-        $this->seeText('Data ' . $user_delete->name . ' sudah berhasil di hapus secara permanent');
+        $this->see('Berhasil menghapus data ' . $user_delete->name);
     }
 }
