@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Pyaesone17\ActiveState\Active;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -161,7 +160,7 @@ class UserController extends Controller
 
         $user->withTrashed()->where('id', $id)->forceDelete();
 
-        return redirect()->back()->with('success', "Data $user->name sudah berhasil di hapus secara permanent");
+        return redirect()->back()->with('success', "Berhasil menghapus data $user->name secara permanent");
     }
 
     /**
@@ -179,7 +178,7 @@ class UserController extends Controller
             $user->restore();
         }
 
-        return redirect()->back()->with('success', "Data $user->name sudah berhasil di kembalikan");
+        return redirect()->back()->with('success', "Berhasil mengembalikan data $user->name");
     }
 
     /**
@@ -218,6 +217,6 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->back()->with('success', "User $user->name status has been changed successfully");
+        return redirect()->back()->with('success', "Berhasil mengubah status $user->name");
     }
 }

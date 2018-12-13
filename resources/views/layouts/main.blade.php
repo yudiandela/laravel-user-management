@@ -52,6 +52,7 @@
     <!-- plugins:js -->
     <script src="{{ asset('theme/vendors/js/vendor.bundle.base.js') }}"></script>
     <script src="{{ asset('theme/vendors/js/vendor.bundle.addons.js') }}"></script>
+    <script src="{{ asset('theme/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page-->
     <!-- End plugin js for this page-->
@@ -63,6 +64,7 @@
     <script src="{{ asset('theme/js/dashboard.js') }}"></script>
     <script src="{{ asset('theme/js/file-upload.js') }}"></script>
     <!-- End custom js for this page-->
+    @stack('scripts')
 </body>
 
 </html>

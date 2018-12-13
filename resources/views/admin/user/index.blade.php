@@ -40,22 +40,8 @@
             <div class="card">
                 <div class="card-body p-3">
 
-                    @if (session('success'))
-                        <div class="alert alert-fill-success" role="alert">
-                            <i class="mdi mdi-alert-circle"></i>
-                            {{ session('success') }}
-                            <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </a>
-                        </div>
-                    @elseif (session('failed'))
-                        <div class="alert alert-fill-danger" role="alert">
-                            <i class="mdi mdi-alert-circle"></i>
-                            {{ session('failed') }}
-                            <a href="#" class="close" data-dismiss="alert" aria-label="Close">
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </a>
-                        </div>
+                    @if (session())
+                        <div class="session" data-session="{{ session('success') ? session('success') : session('failed') }}"></div>
                     @endif
 
                     {{-- <h4 class="card-title">{{ __('Users Table') }}</h4> --}}
@@ -147,3 +133,16 @@
     </div>
 
 @endsection
+
+@push('scripts')
+    <script>
+        const session = $('.session').data('session');
+        if(session) {
+            Swal({
+                type: session.match(/Berhasil/) ? 'success' : 'error',
+                title: session.match(/Berhasil/) ? 'Success..!!' : 'Failed..!!',
+                text: session
+            });
+        }
+    </script>
+@endpush
